@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %} lessons-page {% endblock %}
+
+{% block content %}
+{% include "includes/header.html" %}
+<div class="container" style="margin-top:5%;">
+  <h3 class="mb-4 text-primary">Take Lessons</h3>
+
+  <div class="row">
+    {% for lesson in lessons %}
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          {% if lesson.tutorial %}
+            <video controls class="card-img-top" style="max-height: 200px;">
+              <source src="{{ lesson.tutorial.url }}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          {% else %}
+            <img src="" class="card-img-top" alt="Placeholder">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ lesson.title }}</h5>
+            <p class="card-text">{{ lesson.description|truncatechars:100 }}</p>
+            <a href="{% url 'core:lesson-detail' lesson.id %}" class="btn btn-primary">Enroll Lesson</a>
+          </div>
+          <div class="card-footer text-muted">
+            Created on: {{ lesson.created_on }}
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-12">
+        <p class="text-center text-muted">No lessons available at the moment.</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% include "includes/footer.html" %}
+{% endblock %}

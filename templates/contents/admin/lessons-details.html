@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Lesson List{% endblock %}
+
+{% block content %}
+{% include "includes/header.html" %}
+
+<div class="container" style="margin-top: 5%;">
+  <h3 class="mb-4 text-primary">Enrolled Course</h3>
+
+  <div class="row">
+    <!-- Left Column: Video -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Video Tutorial</h5>
+          {% if lesson.tutorial %}
+            <video 
+              id="lesson-video" 
+              controls 
+              class="w-100" 
+              style="max-height: 400px;"
+              ontimeupdate="updateProgress()"
+              onended="completeProgress()"
+            >
+              <source src="{{ lesson.tutorial.url }}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+            <div class="progress mt-3">
+              <div 
+                id="video-progress" 
+                class="progress-bar progress-bar-striped bg-success" 
+                role="progressbar" 
+                style="width: 0%;" 
+                aria-valuenow="0" 
+                aria-valuemin="0" 
+                aria-valuemax="100"
+              ></div>
+            </div>
+          {% else %}
+            <p class="text-muted">No video tutorial available for this lesson.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Text -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ lesson.title }}</h5>
+          <p class="card-text">{{ lesson.description }}</p>
+          <p class="text-muted"><strong>Created On:</strong> {{ lesson.created_on }}</p>
+          <p class="text-muted"><strong>Last Updated:</strong> {{ lesson.updated_on }}</p>
+          <a href="{% url 'core:lesson-test' lesson.id %}" class="btn btn-primary mt-3">Take Test</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include "includes/footer.html" %}
+
+<script>
+  function updateProgress() {
+    const video = document.getElementById('lesson-video');
+    const progressBar = document.getElementById('video-progress');
+    const percentage = (video.currentTime / video.duration) * 100;
+    progressBar.style.width = `${percentage}%`;
+    progressBar.setAttribute('aria-valuenow', percentage.toFixed(0));
+  }
+
+  function completeProgress() {
+    const progressBar = document.getElementById('video-progress');
+    progressBar.style.width = '100%';
+    progressBar.setAttribute('aria-valuenow', '100');
+  }
+</script>
+
+{% endblock %}

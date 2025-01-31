@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %} test-for {{ lesson.title }}{% endblock %}
+
+{% block content %}
+{% include "includes/header.html" %}
+<div class="container" style="margin-top: 5%;">
+  <h3 class="mb-4 text-primary">Test for: {{ lesson.title }}</h3>
+
+  {% if error %}
+    <p class="text-danger">{{ error }}</p>
+  {% else %}
+  <form method="post" action="{{ submit_url }}">
+    {% csrf_token %}
+    {% for question in questions %}
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title">{{ forloop.counter }}. {{ question.text }}</h5>
+          {% for choice in question.choices.all %}
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="question-{{ question.id }}"
+                id="choice-{{ choice.id }}"
+                value="{{ choice.id }}">
+              <label class="form-check-label" for="choice-{{ choice.id }}">{{ choice.text }}</label>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+    <div class="progress mt-4">
+      <div id="test-progress" class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <button type="submit" class="btn btn-success mt-4">Submit Test</button>
+  </form>
+  {% endif %}
+</div>
+
+<script>
+  const totalQuestions = {{ questions.count }};
+  const form = document.querySelector('form');
+  const progressBar = document.getElementById('test-progress');
+
+  form.addEventListener('change', () => {
+    const answered = [...form.querySelectorAll('input[type="radio"]:checked')].length;
+    const progress = (answered / totalQuestions) * 100;
+    progressBar.style.width = `${progress}%`;
+    progressBar.setAttribute('aria-valuenow', progress.toFixed(0));
+  });
+</script>
+{% include "includes/footer.html" %}
+{% endblock %}

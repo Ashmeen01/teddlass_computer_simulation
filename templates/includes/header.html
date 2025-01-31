@@ -1,0 +1,58 @@
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top  header-transparent ">
+    <div class="container d-flex align-items-center justify-content-between"> 
+
+      <div class="logo">
+        <h1><a href="index.html">Teddlass Computer Simulation</a></h1>
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+      </div>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="{% url 'core:index' %}">Home</a></li>
+          <!-- <li><a class="nav-link scrollto" href="#features">App Features</a></li> -->
+          <!-- <li><a class="nav-link scrollto" href="#pricing">Pricing</a></li>
+          <li><a class="nav-link scrollto" href="#faq">F.A.Q</a></li> -->
+          {% if user.is_authenticated %}
+          <li class="dropdown">
+              <a href="#"><span>Learning</span> <i class="bi bi-chevron-down"></i></a>
+              <ul>
+                  <li><a href="{% url 'core:lessons-list' %}">Lessons</a></li>
+                  <!-- <li><a href="#">Lesson Two</a></li>
+                  <li><a href="#">Lesson Three</a></li>
+                  <li class="dropdown">
+                      <a href="#"><span>Quiz</span> <i class="bi bi-chevron-right"></i></a>
+                      <ul>
+                          <li><a href="#">Lesson One Quiz</a></li>
+                          <li><a href="#">Lesson Two Quiz</a></li>
+                          <li><a href="#">Lesson Three Quiz</a></li>
+                      </ul>
+                  </li> -->
+              </ul>
+          </li>
+          {% endif %}          
+          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+          <li class="dropdown">
+            {% if user.is_authenticated %}
+            <!-- Replace "Get Started" with the username -->
+            <a class="getstarted scrollto" href="#features">{{ user.username }}</a>
+            <!-- Minimal logout button -->
+            <ul class="dropdown-menu">
+                <li><a href="{% url 'user_auth:logout' %}" class="btn btn-link text-danger">Logout</a></li>
+            </ul>
+            {% else %}
+            <!-- Display "Get Started" and options for unauthenticated users -->
+            <a class="getstarted scrollto" href="#features">Get Started</a>
+            <ul class="dropdown-menu">
+                <li><a href="{% url 'user_auth:create-account' %}">Create Account</a></li>
+                <li><a href="{% url 'user_auth:sign-in' %}">Login</a></li>
+            </ul>
+            {% endif %}
+        </li>                          
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+
+    </div>
+  </header><!-- End Header -->

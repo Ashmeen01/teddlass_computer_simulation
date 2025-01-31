@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %} update-lesson {% endblock %}
+
+{% block content %}
+
+{% include "contents/admin/inc/navbar.html" %}
+  <div class="container mt-4">
+    <h1 class="mb-4">
+      {% if lesson %}
+        Update Lesson: {{ lesson.title }}
+      {% else %}
+        Create New Lesson
+      {% endif %}
+    </h1>
+    
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      
+      <div class="mb-3">
+        <label for="id_title" class="form-label">Lesson Title</label>
+        {{ form.title }}
+      </div>
+
+      <div class="mb-3">
+        <label for="id_description" class="form-label">Lesson Description</label>
+        {{ form.description }}
+      </div>
+
+      <div class="mb-3">
+        <label for="id_video" class="form-label">Upload Video Tutorial</label>
+        {{ form.tutorial }}
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        {% if lesson %}
+          Update Lesson
+        {% else %}
+          Save Lesson
+        {% endif %}
+      </button>
+    </form>
+  </div>
+
+{% endblock %}

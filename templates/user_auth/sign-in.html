@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %} Sign In {% endblock title %}
+
+{% block content %}
+
+{% include "includes/header.html" %}
+<main id="main" class="mt-5">
+  <section class="login-section">
+    <div class="container" style="max-width: 500px; margin-top: 100px;">
+      <h2 class="text-center">Sign In</h2>
+      <!-- Alerts will appear here -->
+      <form action="" method="post" id="login_form" class="php-email-form">
+        {% csrf_token %}
+        <div class="form-group mt-3">
+          <input placeholder="Email Address" type="email" name="email" class="form-control" id="email" required>
+        </div>
+        <div class="form-group mt-3">
+          <input placeholder="Password" type="password" name="password" class="form-control" id="password" required>
+        </div>
+        <div class="text-center mt-4">
+          <button type="submit" id="btn-login" class="btn btn-primary">Sign In</button>
+        </div>
+        <p class="text-center mt-3">Don't have an account? <a href="{% url 'user_auth:create-account' %}">Sign Up</a></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<script>
+  $(document).on('submit', '#login_form', function (e) {
+      e.preventDefault();
+
+      // Clear existing alerts
+      $('.alert').remove();
+
+      $.ajax({
+          type: 'POST',
+          url: '{% url "user_auth:sign-in" %}',
+          data: {
+              email: $('#email').val(),
+              password: $('#password').val(),
+              csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+          },
+          success: function (response) {
+              let alertDiv = $(`
+                  <div class="alert alert-success text-center" role="alert">
+                      ${response.message}
+                  </div>
+              `).insertBefore('#login_form');
+              setTimeout(() => {
+                  window.location.href = "{% url 'core:index' %}";
+              }, 1000);
+          },
+          error: function (xhr) {
+              let alertDiv = $(`
+                  <div class="alert alert-danger text-center" role="alert">
+                      ${xhr.responseJSON.message}
+                  </div>
+              `).insertBefore('#login_form');
+              setTimeout(() => {
+                  alertDiv.fadeOut(500, function () {
+                      $(this).remove();
+                  });
+              }, 3000);
+          }
+      });
+  });
+</script>
+
+{% include "includes/footer.html" %}
+
+{% endblock content %}

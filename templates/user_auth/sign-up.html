@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %} Sign Up {% endblock title %}
+
+{% block content %}
+
+{% include "includes/header.html" %}
+<main id="main" class="mt-5">
+  <section class="signup-section">
+    <div class="container" style="max-width: 500px; margin-top: 100px;">
+      <h2 class="text-center">Sign Up</h2>
+      <form action="" method="post" id="create_account" class="php-email-form">
+        {% csrf_token %}
+        <div class="form-group mt-3">
+          <input placeholder="Username" type="text" name="username" class="form-control" id="username" required>
+        </div>
+        <div class="form-group mt-3">
+          <input placeholder="Email Address" type="email" name="email" class="form-control" id="email" required>
+        </div>
+        <div class="form-group mt-3">
+          <input placeholder="Password" type="password" name="password" class="form-control" id="password" required>
+        </div>
+        <div class="form-group mt-3">
+          <input placeholder="Confirm Password" type="password" name="confirm_password" class="form-control" id="confirm_password" required>
+        </div>
+        <div class="text-center mt-4">
+          <button type="submit" id="btn-submit" class="btn btn-primary">Sign Up</button>
+        </div>
+        <p class="text-center mt-3">Already have an account? <a href="{% url 'user_auth:sign-in' %}">Sign In</a></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<script>
+  $(document).on('submit', '#create_account', function (e) {
+      e.preventDefault();
+
+      // Clear existing alerts
+      $('.alert').remove();
+
+      $.ajax({
+          type: 'POST',
+          url: '{% url "user_auth:create-account" %}',
+          data: {
+              username: $('#username').val(),
+              email: $('#email').val(),
+              password: $('#password').val(),
+              confirm_password: $('#confirm_password').val(),
+              csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()
+          },
+          success: function (data) {
+              // Display success message
+              let alertDiv = $(
+                  '<div class="alert alert-success text-center" role="alert">' +
+                  'Account created successfully!' +
+                  '</div>'
+              ).insertBefore('#create_account');
+
+              // Automatically fade out after 3 seconds
+              setTimeout(() => {
+                  alertDiv.fadeOut(500, function () {
+                      $(this).remove();
+                  });
+              }, 3000);
+          },
+          error: function (xhr, status, error) {
+              // Display error message
+              let alertDiv = $(
+                  '<div class="alert alert-danger text-center" role="alert">' +
+                  'Error: ' + xhr.responseText +
+                  '</div>'
+              ).insertBefore('#create_account');
+
+              // Automatically fade out after 3 seconds
+              setTimeout(() => {
+                  alertDiv.fadeOut(500, function () {
+                      $(this).remove();
+                  });
+              }, 3000);
+          }
+      });
+  });
+</script>
+
+
+{% include "includes/footer.html" %}
+
+{% endblock content %}

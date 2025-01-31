@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Test Result{% endblock %}
+
+{% block content %}
+{% include "includes/header.html" %}
+<div class="container" style="margin-top: 5%;">
+  <h3 class="mb-4 text-primary">Test Result for {{ lesson.title }}</h3>
+  <p>You scored <strong>{{ score }}</strong> out of <strong>{{ total_questions }}</strong>.</p>
+  <p>Your percentage is <strong>{{ percentage }}%</strong>.</p>
+
+  {% if percentage >= 50 %}
+    <p class="text-success">Congratulations! You passed the test.</p>
+  {% else %}
+    <p class="text-danger">You did not pass. Try again!</p>
+  {% endif %}
+
+  <a href="{% url 'core:lessons-list' %}" class="btn btn-primary mt-4">Back to Lessons</a>
+</div>
+{% include "includes/footer.html" %}
+{% endblock %}

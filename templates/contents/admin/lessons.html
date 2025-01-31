@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %} lessons {% endblock title %}
+
+{% block content %}
+
+{% include "contents/admin/inc/navbar.html" %}
+
+<div class="container mt-5">
+  
+  <div class="div-action pull pull-right" style="padding-bottom: 20px;">
+    <a href="{% url 'core:create-lesson' %}">
+      <button class="btn btn-default button1">
+        Add New Lesson
+     </button>
+    </a>
+</div> 
+  <table class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>Lesson Id</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for lesson in lessons %}
+        <tr>
+          <td>{{ lesson.id }}</td>
+          <td>{{ lesson.title }}</td>
+          <td>{{ lesson.description }}</td>
+          <td>
+            <a href="{% url 'core:update-lesson' pk=lesson.id %}"><button>Update</button></a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="4">No users found.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock content %}

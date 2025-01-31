@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %} {% endblock title %}
+
+{% block content %}
+
+{% include "contents/admin/inc/navbar.html" %}
+
+<div class="container">
+  <!-- Table for displaying users -->
+  <table class="table table-striped table-bordered" id="userTable">
+    <thead>
+      <tr>
+        <th>User Id</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th class="text-center">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+        <tr> 
+          <td>{{ user.id }}</td>
+          <td>{{ user.username }}</td>
+          <td>{{ user.email }}</td>
+          <td class="text text-center">
+            <a href="#" class="btn btn-danger">Delete</a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="4">No users found.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- DataTables JavaScript and CSS Integration -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+
+<script>
+  // Initialize DataTables for the user table
+  $(document).ready(function() {
+    $('#userTable').DataTable();
+
+    // Handling the Generate Lesson button click (you can add your custom logic here)
+    $('#generateLessonBtn').click(function() {
+      alert('Lesson generation functionality will be implemented here.');
+    });
+  });
+</script>
+
+{% endblock content %}
